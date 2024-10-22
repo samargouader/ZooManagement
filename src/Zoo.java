@@ -1,11 +1,12 @@
 import tn.esprit.gestionzoo.entities.*;
+import tn.esprit.gestionzoo.exceptions.ZooFullException;
 
 
 public class Zoo {
     private Animal[] animals;
     private String name;
     private String city;
-    private final int nbrCages=25;
+    private final int nbrCages=3;
     private int animalCount;
     private Aquatic[] aquaticAnimals;
     private final int nbrAquatic=10;
@@ -16,23 +17,29 @@ public class Zoo {
         this.aquaticAnimals = new Aquatic[this.nbrAquatic];
         if (name!=null && !name.isEmpty())
             this.name = name;
-        else
+        else {
             this.name = "Zoo";
             this.city = city;
             this.animalCount=0;
             this.aquaticAnimalCount=0;
+            }
     }
 
-    boolean addAnimal(Animal animal) {
-        if(!this.isZooFull()){
-            if(searchAnimal(animal)==-1){
-                this.animals[this.animalCount]=animal;
-                this.animalCount++;
-                return true;
-            }
+    void addAnimal(Animal animal) throws ZooFullException {
+        if (this.animalCount >= this.nbrCages) {
+            throw new ZooFullException("Zoo full");
         }
-        return false;
+
+        if (searchAnimal(animal) == -1) {
+            this.animals[this.animalCount] = animal;
+            this.animalCount++;
+        } else {
+            System.out.println("Animal existe");
+        }
     }
+
+
+
 
     public float maxPenguinSwimmingDepth() {
         float maxDepth = 0;
