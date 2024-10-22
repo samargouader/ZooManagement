@@ -1,3 +1,5 @@
+package tn.esprit.gestionzoo.main;
+
 import java.util.Scanner;
 
 
@@ -16,5 +18,7 @@ public class ZooManagement {
         int nbrCages = scanner.nextInt();
 
         System.out.println(zooName + " comporte " + nbrCages + " cages");
+
+
     }
 }

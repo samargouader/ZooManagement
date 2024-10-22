@@ -1,19 +1,30 @@
+import tn.esprit.gestionzoo.entities.*;
+
+
 public class Zoo {
-    Animal[] animals;
-    String name;
-    String city;
-    final int nbrCages=25;
-    int animalCount;
+    private Animal[] animals;
+    private String name;
+    private String city;
+    private final int nbrCages=25;
+    private int animalCount;
+    private Aquatic[] aquaticAnimals;
+    private final int nbrAquatic=10;
+    private int aquaticAnimalCount;
 
     Zoo(String name, String city) {
         this.animals = new Animal[25];
-        this.name = name;
-        this.city = city;
-        this.animalCount=0;
+        this.aquaticAnimals = new Aquatic[this.nbrAquatic];
+        if (name!=null && !name.isEmpty())
+            this.name = name;
+        else
+            this.name = "Zoo";
+            this.city = city;
+            this.animalCount=0;
+            this.aquaticAnimalCount=0;
     }
 
     boolean addAnimal(Animal animal) {
-        if(this.animalCount<25){
+        if(!this.isZooFull()){
             if(searchAnimal(animal)==-1){
                 this.animals[this.animalCount]=animal;
                 this.animalCount++;
@@ -23,12 +34,45 @@ public class Zoo {
         return false;
     }
 
+    public float maxPenguinSwimmingDepth() {
+        float maxDepth = 0;
+        for(int i=0; i<this.aquaticAnimalCount; i++){
+            if(this.aquaticAnimals[i] instanceof Penguin){
+                Penguin p1 = (Penguin) this.aquaticAnimals[i];
+                Penguin p2 = (Penguin) this.aquaticAnimals[i+1];
+                if(p1.swimmingDepth>p2.swimmingDepth){
+                    maxDepth = p1.swimmingDepth;
+                }
+                else{
+                    maxDepth = p2.swimmingDepth;
+                }
+            }
+        }
+        return maxDepth;
+    }
+
+    public void addAquaticAnimal(Aquatic aquatic) {
+        if(this.aquaticAnimalCount<this.aquaticAnimals.length) {
+            this.aquaticAnimals[this.aquaticAnimalCount]=aquatic;
+            this.aquaticAnimalCount++;
+        }
+        else {
+            System.out.println("Zoo is full!");
+        }
+    }
+
+    public void setName(String name){
+        if (name!=null && !name.isEmpty())
+            this.name=name;
+    }
+
     void displayZoo(){
         System.out.println("Name: " + this.name+"\nNbre cage :" + this.nbrCages + "\nCity: " + this.city);
     }
+
     int searchAnimal(Animal animal) {
         for(int i=0;i<this.animalCount;i++) {
-            if(this.animals[i].name==animal.name) {
+            if(this.animals[i].getName()==animal.getName()) {
                 return i;
             }
         }
@@ -41,13 +85,20 @@ public class Zoo {
             for(int i=index;i<this.animalCount;i++) {
                 this.animals[i]=this.animals[i+1];
             }
+            this.animals[this.animalCount-1]=null;
             this.animalCount--;
             return true;
         }
         return false;
     }
 
-    boolean isFull(){
+    public void showSwim() {
+        for (int i=0;i<this.aquaticAnimalCount;i++) {
+            this.aquaticAnimals[i].swim();
+        }
+    }
+
+    boolean isZooFull(){
         return this.nbrCages==this.animalCount;
     }
 
@@ -59,11 +110,26 @@ public class Zoo {
     }
 
     @Override
-    public String toString(){
-        String str = "\n Animals:\n";
-        for (int i=0; i<this.animalCount; i++){
-            str += this.animals[i].toString();
+    public String toString() {
+        StringBuilder str = new StringBuilder("Name: " + this.name + "\nNbr cage: " + this.nbrCages + "\nCity: " + this.city + "\nAnimals: ");
+        for (int i = 0; i < this.animalCount; i++) {
+            str.append("\n").append(this.animals[i].toString());
         }
-        return "Name: " + this.name+"\nNbre cage :" + this.nbrCages + "\nCity: " + this.city + "\n" + str;
+        return str.toString();
     }
+
+    public void displayNumberOfAquaticsByType(){
+        int dolphin=0;
+        int penguin=0;
+        for (int i = 0; i < this.aquaticAnimalCount; i++) {
+            if (this.aquaticAnimals[i] instanceof Dolphin){
+                dolphin++;
+            }
+            if (this.aquaticAnimals[i] instanceof Penguin){
+                penguin++;
+            }
+        }
+        System.out.println();
+    }
+
 }
