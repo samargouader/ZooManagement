@@ -25,16 +25,14 @@ public class Zoo {
             }
     }
 
-    void addAnimal(Animal animal) throws ZooFullException {
-        if (this.animalCount >= this.nbrCages) {
+    public void addAnimal(Animal animal) throws ZooFullException {
+        if (isZooFull()) {
             throw new ZooFullException("Zoo full");
         }
 
         if (searchAnimal(animal) == -1) {
             this.animals[this.animalCount] = animal;
             this.animalCount++;
-        } else {
-            System.out.println("Animal existe");
         }
     }
 
